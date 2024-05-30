@@ -1,0 +1,20 @@
+# install required libraries
+pip install ultralytics
+!pip install -q git+https://github.com/THU-MIG/yolov10.git
+#clone the yolov10 repositary
+!git clone https://github.com/THU-MIG/yolov10.git
+#get into current working directory
+cd yolov10
+# download the weights of the required model which is used to train.
+!mkdir -p {HOME}/weights
+!wget -P {HOME}/weights -q https://github.com/THU-MIG/yolov10/releases/download/v1.1/yolov10n.pt
+!wget -P {HOME}/weights -q https://github.com/THU-MIG/yolov10/releases/download/v1.1/yolov10s.pt
+!wget -P {HOME}/weights -q https://github.com/THU-MIG/yolov10/releases/download/v1.1/yolov10m.pt
+!wget -P {HOME}/weights -q https://github.com/THU-MIG/yolov10/releases/download/v1.1/yolov10b.pt
+!wget -P {HOME}/weights -q https://github.com/THU-MIG/yolov10/releases/download/v1.1/yolov10x.pt
+!wget -P {HOME}/weights -q https://github.com/THU-MIG/yolov10/releases/download/v1.1/yolov10l.pt
+!ls -lh {HOME}/weights
+# train the yolov10 model
+!yolo task=detect mode=train model=/content/yolov10n.pt data=/content/custom_data.yaml epochs=15 imgsz=224 plots=True
+# predict the outcome based on custom data
+!yolo task=detect mode=predict conf=0.25 save=True model=/content/yolov10/runs/detect/train/weights/best.pt source=/content/IMG20220622185728.jpg
